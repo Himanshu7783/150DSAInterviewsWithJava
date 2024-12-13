@@ -1,0 +1,125 @@
+169. Majority Element
+
+Given an array nums of size n, return the majority element.
+
+The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+
+ 
+
+Example 1:
+
+Input: nums = [3,2,3]
+Output: 3
+Example 2:
+
+Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+ 
+
+Constraints:
+
+n == nums.length
+1 <= n <= 5 * 104
+-109 <= nums[i] <= 109
+ 
+
+Follow-up: Could you solve the problem in linear time and in O(1) space?
+Given an array nums of size n, return the majority element.
+
+The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+
+Example 1:
+
+Input: nums = [3,2,3]
+Output: 3
+Example 2:
+
+Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+Constraints:
+
+n == nums.length
+1 <= n <= 5 * 104
+-231 <= nums[i] <= 231 - 1
+Follow-up: Could you solve the problem in linear time and in O(1) space?
+
+Solution 1:Brute Force
+
+Iterate over the array twice, count the number of times an element occurs, if the value of count is greater than n/2 then return that number.
+class Solution {
+    public int majorityElement(int[] nums) {
+        int majorityCount = nums.length/2;
+        for (int num : nums) {
+            int count = 0;
+            for (int elem : nums) {
+                if (elem == num) 
+                    count += 1;
+            }
+            if (count > majorityCount) 
+                return num;
+        }
+        return -1;    
+    }
+}
+Time Complexity: O(n²)
+Space Complexity: O(1)
+
+Solution 2:Using HashMap
+
+Create a HashMap to store element as key and number of times that element occur as value.
+If the frequency of an element is greater than n/2, then return that element.
+class Solution {
+    public int majorityElement(int[] nums) {
+        HashMap<Integer,Integer> numFreq = new HashMap<>();
+        for(int num : nums) {
+            if (!numFreq.containsKey(num)) {
+                numFreq.put(num, 1);                    
+            }
+            else {
+                numFreq.put(num, numFreq.get(num) + 1);
+            }
+            if (numFreq.get(num) > (nums.length / 2)) 
+                return num;
+        }
+        return -1;    
+    }
+}
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Solution 3:Using Sorting
+
+Sort the array.
+Return the middle element.
+class Solution {
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length/2];
+    }
+}
+Time Complexity: O(nlogn)
+Space Complexity: O(1)
+
+Solution 4:Boyer-Moore Voting Algorithm
+
+If we cancel out each occurrence of an element e with all the other elements that are different from e then e will exist till end if it is a majority element.
+Loop through each element and maintains a count of the element that has the potential of being the majority element.
+If next element is same then increments the count, otherwise decrements the count.
+If the count reaches 0 then update the potential index to the current element and reset count to 1.
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count = 0;
+        int ans = nums[0];
+        for (int num : nums) {
+            if (count == 0)
+                ans = num;
+            if (num == ans)
+                count++;
+            else 
+                count--;
+        }
+        return ans;
+    }
+}
+Time Complexity: O(n)
+Space Complexity: O(1)
