@@ -1,0 +1,97 @@
+238. Product of Array Except Self
+
+Hint
+Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the division operation.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,4]
+Output: [24,12,8,6]
+Example 2:
+
+Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]
+ 
+
+Constraints:
+
+2 <= nums.length <= 105
+-30 <= nums[i] <= 30
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+ 
+
+Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
+
+
+SOLUTIONS: 
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        int[] result = new int[n];
+
+        // Calculate left products
+        left[0] = 1;
+        for (int i = 1; i < n; i++) {
+            left[i] = left[i - 1] * nums[i - 1];
+        }
+
+        // Calculate right products
+        right[n - 1] = 1;
+        for (int i = n - 2; i >= 0; i--) {
+            right[i] = right[i + 1] * nums[i + 1];
+        }
+
+        // Calculate result
+        for (int i = 0; i < n; i++) {
+            result[i] = left[i] * right[i];
+        }
+
+        return result;
+    }
+}
+EXPLAINATION: 
+
+Initialization:
+
+Create three arrays:
+left: To store the product of all elements to the left of the current index.
+right: To store the product of all elements to the right of the current index.
+result: To store the final result.
+Calculate Left Products:
+
+Initialize left[0] to 1, as there are no elements to the left of the first element.
+Iterate through the nums array from index 1 to n - 1:
+Calculate the product of all elements to the left of the current index by multiplying the previous left value with the current nums value.
+Calculate Right Products:
+
+Initialize right[n - 1] to 1, as there are no elements to the right of the last element.
+Iterate through the nums array from index n - 2 to 0:
+Calculate the product of all elements to the right of the current index by multiplying the previous right value with the current nums value.
+Calculate Result:
+
+Iterate through the nums array:
+Calculate the product of all elements except the current element by multiplying the corresponding left and right values.
+Return Result:
+
+Return the result array.
+Time Complexity:
+
+The algorithm iterates through the nums array three times (for left, right, and result calculations).
+Therefore, the time complexity is O(n).
+Space Complexity:
+
+The algorithm uses three additional arrays (left, right, and result).
+Therefore, the space complexity is O(n).
+Follow-up: O(1) Extra Space
+
+To achieve O(1) extra space, you can modify the algorithm to calculate the left and right products in place within the result array.
+This requires careful consideration to avoid overwriting values that are still needed for subsequent calculations.
