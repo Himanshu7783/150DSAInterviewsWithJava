@@ -1,0 +1,71 @@
+58. Length of Last Word
+
+Given a string s consisting of words and spaces, return the length of the last word in the string.
+
+A word is a maximal 
+substring
+ consisting of non-space characters only.
+
+ 
+
+Example 1:
+
+Input: s = "Hello World"
+Output: 5
+Explanation: The last word is "World" with length 5.
+Example 2:
+
+Input: s = "   fly me   to   the moon  "
+Output: 4
+Explanation: The last word is "moon" with length 4.
+Example 3:
+
+Input: s = "luffy is still joyboy"
+Output: 6
+Explanation: The last word is "joyboy" with length 6.
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of only English letters and spaces ' '.
+There will be at least one word in s.
+
+Java
+
+class Solution {
+    public int lengthOfLastWord(String s) {
+        int count = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) != ' ') {
+                count++;
+            } else if (count > 0) {
+                break;
+            }
+        }
+        return count;
+    }
+}
+Explanation:
+
+Initialization:
+
+count: This variable will store the length of the last word encountered. It's initialized to 0.
+Iteration:
+
+The loop iterates through the string s from the end (last character) to the beginning.
+Inside the loop:
+If the current character is not a space (s.charAt(i) != ' '), it means we're within a word. Increment the count.
+If the current character is a space (s.charAt(i) == ' ') and count is greater than 0, it means we've encountered the end of the last word. Break out of the loop.
+Return Result:
+
+After the loop, count will hold the length of the last word. Return count.
+Time Complexity:
+
+O(n), where n is the length of the string. In the worst case, the loop needs to iterate through all characters in the string.
+Space Complexity:
+
+O(1). The algorithm uses constant extra space.
+This brute-force approach directly iterates through the string and counts the characters of the last word. While it may not be the most efficient solution, it's straightforward and easy to understand.
+
+
