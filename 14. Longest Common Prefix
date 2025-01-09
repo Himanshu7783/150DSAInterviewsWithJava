@@ -1,0 +1,68 @@
+14. Longest Common Prefix
+
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string "".
+
+ 
+
+Example 1:
+
+Input: strs = ["flower","flow","flight"]
+Output: "fl"
+Example 2:
+
+Input: strs = ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+ 
+
+Constraints:
+
+1 <= strs.length <= 200
+0 <= strs[i].length <= 200
+strs[i] consists of only lowercase English letters.
+
+
+Java
+
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+
+        String prefix = strs[0]; 
+        for (int i = 1; i < strs.length; i++) {
+            while (strs[i].indexOf(prefix) != 0) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+                if (prefix.isEmpty()) {
+                    return "";
+                }
+            }
+        }
+        return prefix;
+    }
+}
+Explanation:
+
+Initialization:
+
+The code starts by checking if the input array strs is empty or null. If it is, an empty string is returned as there are no strings to compare.
+prefix is initially set to the first string in the array (strs[0]).
+Iteration:
+
+The code iterates through the remaining strings in the array (from index 1 to strs.length - 1).
+In each iteration, it checks if the current string (strs[i]) starts with the prefix.
+If it doesn't, the prefix is shortened by removing the last character using prefix = prefix.substring(0, prefix.length() - 1).
+If the prefix becomes an empty string after shortening, it means there is no common prefix among the strings, so an empty string is returned.
+Return Result:
+
+After the loop completes, the remaining prefix represents the longest common prefix among all the strings in the array.
+The function returns this prefix.
+Time Complexity:
+
+In the worst case, the prefix might need to be shortened character by character for each string in the array.
+This results in a time complexity of O(S * N), where:
+S is the length of the longest string in the array.
+N is the number of strings in the array.
