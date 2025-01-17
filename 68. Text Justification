@@ -1,0 +1,171 @@
+68. Text Justification
+
+Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly maxWidth characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left-justified, and no extra space is inserted between words.
+
+Note:
+
+A word is defined as a character sequence consisting of non-space characters only.
+Each word's length is guaranteed to be greater than 0 and not exceed maxWidth.
+The input array words contains at least one word.
+ 
+
+Example 1:
+
+Input: words = ["This", "is", "an", "example", "of", "text", "justification."], maxWidth = 16
+Output:
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+Example 2:
+
+Input: words = ["What","must","be","acknowledgment","shall","be"], maxWidth = 16
+Output:
+[
+  "What   must   be",
+  "acknowledgment  ",
+  "shall be        "
+]
+Explanation: Note that the last line is "shall be    " instead of "shall     be", because the last line must be left-justified instead of fully-justified.
+Note that the second line is also left-justified because it contains only one word.
+Example 3:
+
+Input: words = ["Science","is","what","we","understand","well","enough","to","explain","to","a","computer.","Art","is","everything","else","we","do"], maxWidth = 20
+Output:
+[
+  "Science  is  what we",
+  "understand      well",
+  "enough to explain to",
+  "a  computer.  Art is",
+  "everything  else  we",
+  "do                  "
+]
+ 
+
+Constraints:
+
+1 <= words.length <= 300
+1 <= words[i].length <= 20
+words[i] consists of only English letters and symbols.
+1 <= maxWidth <= 100
+words[i].length <= maxWidth
+
+Java
+
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> lines = new ArrayList<>();
+        int n = words.length;
+        int currentLineLength = 0;
+        int wordCount = 0;
+        List<String> currentLineWords = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            String word = words[i];
+            int wordLength = word.length();
+
+            // If adding the current word exceeds maxWidth, justify the current line
+            if (currentLineLength + wordLength + wordCount > maxWidth) {
+                lines.add(justifyLine(currentLineWords, currentLineLength, wordCount, maxWidth));
+                currentLineWords.clear();
+                currentLineLength = 0;
+                wordCount = 0;
+            }
+
+            // Add the current word to the current line
+            currentLineWords.add(word);
+            currentLineLength += wordLength;
+            wordCount++;
+        }
+
+        // Justify the last line (left-justified)
+        lines.add(leftJustifyLine(currentLineWords, currentLineLength, wordCount, maxWidth));
+
+        return lines;
+    }
+
+    private String justifyLine(List<String> words, int currentLineLength, int wordCount, int maxWidth) {
+        if (wordCount == 1) {
+            return padRight(words.get(0), maxWidth);
+        }
+
+        int totalSpaces = maxWidth - currentLineLength;
+        int spacesBetweenWords = totalSpaces / (wordCount - 1);
+        int extraSpaces = totalSpaces % (wordCount - 1);
+
+        StringBuilder line = new StringBuilder();
+        for (int i = 0; i < wordCount; i++) {
+            line.append(words.get(i));
+            if (i < wordCount - 1) {
+                for (int j = 0; j < spacesBetweenWords; j++) {
+                    line.append(" ");
+                }
+                if (extraSpaces > 0) {
+                    line.append(" ");
+                    extraSpaces--;
+                }
+            }
+        }
+
+        return line.toString();
+    }
+
+    private String leftJustifyLine(List<String> words, int currentLineLength, int wordCount, int maxWidth) {
+        StringBuilder line = new StringBuilder();
+        for (int i = 0; i < wordCount; i++) {
+            line.append(words.get(i));
+            if (i < wordCount - 1) {
+                line.append(" ");
+            }
+        }
+        return padRight(line.toString(), maxWidth);
+    }
+
+    private String padRight(String str, int maxWidth) {
+        StringBuilder sb = new StringBuilder(str);
+        while (sb.length() < maxWidth) {
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+}
+Explanation:
+
+Initialization:
+
+lines: A list to store the formatted lines.
+currentLineLength: Keeps track of the current line's character count.
+wordCount: Counts the number of words in the current line.
+currentLineWords: A list to store the words in the current line.
+Iterate through Words:
+
+For each word:
+Calculate the word's length.
+If adding the word exceeds maxWidth:
+Justify the current line using justifyLine().
+Clear currentLineWords and reset currentLineLength and wordCount.
+Add the word to currentLineWords, update currentLineLength, and increment wordCount.
+Justify Last Line:
+
+Justify the last line using leftJustifyLine() (left-justified).
+justifyLine():
+
+Handle the case of a single word line (pad right).
+Calculate totalSpaces and distribute them evenly among words.
+Handle extra spaces using extraSpaces.
+Construct the justified line using a StringBuilder.
+leftJustifyLine():
+
+Construct the line with a single space between words.
+Pad the right side with spaces using padRight().
+padRight():
+
+Add spaces to the end of the string to reach maxWidth.
+This solution effectively addresses the text justification problem with clear and concise code.
