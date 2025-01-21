@@ -1,0 +1,71 @@
+392. Is Subsequence
+
+Given two strings s and t, return true if s is a subsequence of t, or false otherwise.
+
+A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
+
+ 
+
+Example 1:
+
+Input: s = "abc", t = "ahbgdc"
+Output: true
+Example 2:
+
+Input: s = "axc", t = "ahbgdc"
+Output: false
+ 
+
+Constraints:
+
+0 <= s.length <= 100
+0 <= t.length <= 104
+s and t consist only of lowercase English letters.
+ 
+
+Follow up: Suppose there are lots of incoming s, say s1, s2, ..., sk where k >= 109, and you want to check one by one to see if t has its subsequence. In this scenario, how would you change your code?
+Java
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int i = 0; // Pointer for string s
+        int j = 0; // Pointer for string t
+
+        while (i < s.length() && j < t.length()) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++; 
+            }
+            j++;
+        }
+
+        return i == s.length(); // If we've traversed the entire string s, it's a subsequence
+    }
+}
+Explanation:
+
+Initialization:
+
+i: Pointer to track the current position in string s.
+j: Pointer to track the current position in string t.
+Iteration:
+
+The loop iterates through both strings simultaneously.
+If the current character in s (at index i) matches the current character in t (at index j), we increment i to move to the next character in s.
+Regardless of whether a match is found, we increment j to move to the next character in t.
+Check for Subsequence:
+
+After the loop completes, if i has reached the end of string s (i.e., i == s.length()), it means we've found all characters of s in the order they appear in t. Therefore, s is a subsequence of t, and the function returns true.
+If i has not reached the end of s, it means we couldn't find all characters of s in t in the correct order, so s is not a subsequence, and the function returns false.
+Follow-up:
+
+If there are many incoming strings s1, s2, ..., sk to check against t, we can optimize the code to avoid redundant comparisons. Here's one approach:
+
+Preprocess t:
+
+Create a 2D array next of size 26 x t.length().
+For each character c in the alphabet and each position i in t:
+next[c][i] will store the index of the next occurrence of character c in t after position i. If no such occurrence exists, next[c][i] will be set to t.length().
+Check Subsequence for Each s:
+
+Use the next array to efficiently find the next occurrence of each character in s within t. This avoids repeatedly searching t from the beginning for each character.
+This approach improves efficiency by pre-computing the next occurrences of characters within t, reducing the number of comparisons needed for each incoming string 
