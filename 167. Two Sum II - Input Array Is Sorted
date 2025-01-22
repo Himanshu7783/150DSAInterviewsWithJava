@@ -36,55 +36,42 @@ numbers is sorted in non-decreasing order.
 The tests are generated such that there is exactly one solution.
 
 
-Python
+Java
 
-class Solution:
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        """
-        Finds indices of two numbers in a sorted array that sum to a target.
-
-        Args:
-            numbers: A sorted list of integers.
-            target: The target sum.
-
-        Returns:
-            A list containing the 1-indexed indices of the two numbers.
-        """
-        left, right = 0, len(numbers) - 1
-
-        while left < right:
-            sum_ = numbers[left] + numbers[right]
-
-            if sum_ == target:
-                return [left + 1, right + 1]
-            elif sum_ < target:
-                left += 1
-            else:
-                right -= 1
-
-        return []  # No solution found
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = i + 1; j < numbers.length; j++) {
+                if (numbers[i] + numbers[j] == target) {
+                    return new int[]{i + 1, j + 1}; // 1-indexed indices
+                }
+            }
+        }
+        return new int[]{-1, -1}; // No solution found
+    }
+}
 Explanation:
 
 Initialization:
 
-left: Pointer starting at the beginning of the array.
-right: Pointer starting at the end of the array.
-Iteration:
+Two nested loops are used to iterate through all possible pairs of numbers in the array.
+The outer loop (i) iterates from the beginning of the array.
+The inner loop (j) starts from the element after the current i.
+Check for Target Sum:
 
-While left is less than right:
-Calculate the sum_ of the numbers at left and right.
-If sum_ equals the target:
-Return the 1-indexed indices of left and right as a list.
-If sum_ is less than the target:
-Move left one position to the right.
-If sum_ is greater than the target:
-Move right one position to the left.
+Inside the inner loop, the sum of numbers[i] and numbers[j] is calculated.
+If the sum equals the target:
+An array containing the 1-indexed indices of the two numbers (i + 1 and j + 1) is returned.
 No Solution:
 
-If the loop completes without finding a solution, return an empty list.
-Key Points:
+If the loops complete without finding a pair that sums to the target, an array containing -1 and -1 is returned to indicate no solution.
+Time Complexity:
 
-Two Pointers: The algorithm utilizes the two-pointer approach, efficiently traversing the sorted array from both ends.
-Constant Space: The solution uses only constant extra space (pointers and variables), satisfying the space complexity requirement.
-Sorted Array: The sorted nature of the array is crucial for this approach to work effectively.
-This solution effectively addresses the given problem and fulfills all the requirements.
+The time complexity of this brute-force approach is O(n^2) due to the nested loops.
+Space Complexity:
+
+The space complexity is O(1) as it only uses constant extra space for variables.
+Note:
+
+This brute-force solution is not the most efficient for this problem, as it has a quadratic time complexity.
+For a sorted array, the two-pointer approach (as shown in the previous responses) provides a more efficient solution with O(n) time complexity.
