@@ -1,0 +1,114 @@
+15. 3Sum
+Hint
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.
+
+ 
+
+Example 1:
+
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Explanation: 
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter.
+Example 2:
+
+Input: nums = [0,1,1]
+Output: []
+Explanation: The only possible triplet does not sum up to 0.
+Example 3:
+
+Input: nums = [0,0,0]
+Output: [[0,0,0]]
+Explanation: The only possible triplet sums up to 0.
+ 
+
+Constraints:
+
+3 <= nums.length <= 3000
+-105 <= nums[i] <= 105
+
+Java
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length < 3) {
+            return result;
+        }
+
+        Arrays.sort(nums); // Sort the array for efficient two-pointer approach
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            // Skip duplicates for the first element
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            int left = i + 1;
+            int right = nums.length - 1;
+
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+
+                if (sum == 0) {
+                    // Found a triplet
+                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+                    // Skip duplicates for the second and third elements
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+
+                    left++;
+                    right--;
+                } else if (sum < 0) {
+                    left++; // Increase left pointer to increase sum
+                } else {
+                    right--; // Decrease right pointer to decrease sum
+                }
+            }
+        }
+
+        return result;
+    }
+}
+Explanation:
+
+Initialization:
+
+Create an empty list result to store the triplets.
+Handle edge cases: If the array is null or has less than 3 elements, return an empty list.
+Sorting:
+
+Sort the nums array in ascending order. This is crucial for the two-pointer approach to efficiently find triplets that sum to zero.
+Iterating:
+
+Iterate through the array using a loop:
+i: The index of the first element of the potential triplet.
+Skip duplicates for the first element: If the current element is the same as the previous element, skip it to avoid duplicate triplets.
+Two-Pointer Approach:
+
+Initialize two pointers:
+left: Points to the element after the current i.
+right: Points to the last element of the array.
+Calculate the sum of the current triplet (nums[i], nums[left], nums[right]).
+If sum is 0:
+Add the triplet (nums[i], nums[left], nums[right]) to the result list.
+Skip duplicates for the second and third elements: Move left and right pointers to the next distinct elements to avoid duplicate triplets.
+If sum is less than 0:
+Increase the left pointer to increase the sum.
+If sum is greater than 0:
+Decrease the right pointer to decrease the sum.
+Return Result:
+
+Return the result list containing all the unique triplets that sum to zero.
+This solution effectively finds all unique triplets that sum to zero using the two-pointer approach and handles duplicates efficiently.
