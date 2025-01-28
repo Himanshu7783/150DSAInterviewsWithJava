@@ -1,0 +1,77 @@
+3. Longest Substring Without Repeating Characters
+
+Hint
+Given a string s, find the length of the longest 
+substring
+ without repeating characters.
+
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+Java
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length();
+        int maxLength = 0;
+        int left = 0; 
+        Set<Character> set = new HashSet<>(); 
+
+        for (int right = 0; right < n; right++) {
+            char currentChar = s.charAt(right);
+
+            // If the character is already in the set, remove characters from the left until it's removed
+            while (set.contains(currentChar)) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+
+            // Add the current character to the set
+            set.add(currentChar);
+
+            // Update the maximum length
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+
+        return maxLength;
+    }
+}
+Explanation:
+
+Initialization:
+
+n: Length of the input string s.
+maxLength: Stores the length of the longest substring found so far (initialized to 0).
+left: Pointer to the beginning of the current substring.
+set: A HashSet to keep track of unique characters encountered in the current substring.
+Sliding Window Approach:
+
+The code iterates through the string using a sliding window.
+right pointer moves through the string.
+At each step:
+If the current character (currentChar) is already in the set:
+Remove characters from the left side of the window (by incrementing left) until the currentChar is removed from the set.
+Add the currentChar to the set.
+Update maxLength if the current window size (right - left + 1) is greater than the current maxLength.
+Return Result:
+
+After iterating through the entire string, return the maxLength.
+Time Complexity: O(n) - Since each character is processed at most twice (once when it's added to the set and possibly once when it's removed).
+
+Space Complexity: O(min(n, m)) - Where m is the size of the character set. In this case, m is at most 128 (for ASCII characters).
