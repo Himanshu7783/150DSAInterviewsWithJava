@@ -1,0 +1,127 @@
+30. Substring with Concatenation of All Words
+
+You are given a string s and an array of strings words. All the strings of words are of the same length.
+
+A concatenated string is a string that exactly contains all the strings of any permutation of words concatenated.
+
+For example, if words = ["ab","cd","ef"], then "abcdef", "abefcd", "cdabef", "cdefab", "efabcd", and "efcdab" are all concatenated strings. "acdbef" is not a concatenated string because it is not the concatenation of any permutation of words.
+Return an array of the starting indices of all the concatenated substrings in s. You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: s = "barfoothefoobarman", words = ["foo","bar"]
+
+Output: [0,9]
+
+Explanation:
+
+The substring starting at 0 is "barfoo". It is the concatenation of ["bar","foo"] which is a permutation of words.
+The substring starting at 9 is "foobar". It is the concatenation of ["foo","bar"] which is a permutation of words.
+
+Example 2:
+
+Input: s = "wordgoodgoodgoodbestword", words = ["word","good","best","word"]
+
+Output: []
+
+Explanation:
+
+There is no concatenated substring.
+
+Example 3:
+
+Input: s = "barfoofoobarthefoobarman", words = ["bar","foo","the"]
+
+Output: [6,9,12]
+
+Explanation:
+
+The substring starting at 6 is "foobarthe". It is the concatenation of ["foo","bar","the"].
+The substring starting at 9 is "barthefoo". It is the concatenation of ["bar","the","foo"].
+The substring starting at 12 is "thefoobar". It is the concatenation of ["the","foo","bar"].
+
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+1 <= words.length <= 5000
+1 <= words[i].length <= 30
+s and words[i] consist of lowercase English letters.
+
+Java
+
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> result = new ArrayList<>();
+        if (s == null || s.length() == 0 || words == null || words.length == 0) {
+            return result;
+        }
+
+        int wordLength = words[0].length();
+        int numWords = words.length;
+        int totalLength = wordLength * numWords;
+
+        // Create a map to count the frequency of each word in the 'words' array
+        Map<String, Integer> wordCount = new HashMap<>();
+        for (String word : words) {
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+        }
+
+        // Iterate through the string 's'
+        for (int i = 0; i <= s.length() - totalLength; i++) {
+            // Create a copy of the wordCount map to track the frequency of words in the current substring
+            Map<String, Integer> seenWords = new HashMap<>();
+
+            // Check if the current substring contains all the words in the 'words' array
+            for (int j = 0; j < numWords; j++) {
+                String currentWord = s.substring(i + j * wordLength, i + (j + 1) * wordLength);
+                seenWords.put(currentWord, seenWords.getOrDefault(currentWord, 0) + 1);
+
+                // If the frequency of the current word in the substring exceeds the expected frequency
+                if (!wordCount.containsKey(currentWord) || seenWords.get(currentWord) > wordCount.get(currentWord)) {
+                    break;
+                }
+
+                // If all words in the current substring have been found, add the starting index to the result list
+                if (j == numWords - 1) {
+                    result.add(i);
+                }
+            }
+        }
+
+        return result;
+    }
+}
+Explanation:
+
+Initialization:
+
+result: A list to store the starting indices of concatenated substrings.
+wordLength: The length of each word in the words array.
+numWords: The number of words in the words array.
+totalLength: The total length of all words combined.
+wordCount: A HashMap to store the frequency of each word in the words array.
+Iterating through the String:
+
+Iterate through the string s using a loop that starts from 0 and ends at s.length() - totalLength.
+In each iteration, create a seenWords HashMap to track the frequency of words encountered in the current substring.
+Checking for Concatenated Substring:
+
+Iterate numWords times within the outer loop:
+Extract the current word from the substring.
+Update the seenWords map with the frequency of the current word.
+If the current word is not present in the wordCount map or its frequency in the substring exceeds the expected frequency, break the inner loop.
+If all words have been found in the correct order and frequency, add the starting index of the substring to the result list.
+Return Result:
+
+Return the result list containing the starting indices of all concatenated substrings.
+Key Improvements:
+
+Efficient Word Counting: The wordCount map is used to efficiently store and access the frequency of each word in the words array.
+Concise Looping: The code uses concise loops to iterate through the string and check for concatenated substrings.
+Early Break: The inner loop breaks early if a word is not found or its frequency exceeds the expected limit, improving efficiency.
+Clear Comments: Comments are added to explain the purpose of each code block and variable.
+This improved solution provides a clear and efficient way to find all concatenated substrings in the given string.
