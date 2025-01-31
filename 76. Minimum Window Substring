@@ -1,0 +1,92 @@
+76. Minimum Window Substring
+
+Given two strings s and t of lengths m and n respectively, return the minimum window 
+substring
+ of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+
+The testcases will be generated such that the answer is unique.
+
+ 
+
+Example 1:
+
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+Example 2:
+
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+Example 3:
+
+Input: s = "a", t = "aa"
+Output: ""
+Explanation: Both 'a's from t must be included in the window.
+Since the largest window of s only has one 'a', return empty string.
+ 
+
+Constraints:
+
+m == s.length
+n == t.length
+1 <= m, n <= 105
+s and t consist of uppercase and lowercase English letters.
+ 
+
+Follow up: Could you find an algorithm that runs in O(m + n) time?
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) {
+            return "";
+        }
+
+        Map<String, Integer> targetMap = new HashMap<>();
+        for (int i = 0; i < t.length(); i++) {
+            String charStr = String.valueOf(t.charAt(i));
+            targetMap.put(charStr, targetMap.getOrDefault(charStr, 0) + 1);
+        }
+
+        int minLen = Integer.MAX_VALUE;
+        int start = 0;
+        int left = 0;
+        int matchCount = 0;
+
+        Map<String, Integer> windowMap = new HashMap<>();
+
+        for (int right = 0; right < s.length(); right++) {
+            String charStr = String.valueOf(s.charAt(right));
+            windowMap.put(charStr, windowMap.getOrDefault(charStr, 0) + 1);
+
+            if (targetMap.containsKey(charStr) && windowMap.get(charStr) <= targetMap.get(charStr)) {
+                matchCount++;
+            }
+
+            while (matchCount == t.length()) {
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    start = left;
+                }
+
+                String leftCharStr = String.valueOf(s.charAt(left));
+                windowMap.put(leftCharStr, windowMap.get(leftCharStr) - 1);
+
+                if (targetMap.containsKey(leftCharStr) && windowMap.get(leftCharStr) < targetMap.get(leftCharStr)) {
+                    matchCount--;
+                }
+                left++;
+            }
+        }
+
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+    }
+}
+Key Change:
+
+class Solution Wrapper: The minWindow method is now correctly placed inside the Solution class, which is what LeetCode's judging system expects.
+With this change, the code should compile and run correctly on LeetCode.  I've removed the main method as it's not needed for LeetCode submissions.  
+Just copy and paste this entire code block into the LeetCode editor.
