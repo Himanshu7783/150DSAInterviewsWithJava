@@ -1,0 +1,87 @@
+54. Spiral Matrix
+Hint
+Given an m x n matrix, return all elements of the matrix in spiral order.
+
+ 
+
+Example 1:
+
+
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,3,6,9,8,7,4,5]
+Example 2:
+
+
+Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+ 
+
+Constraints:
+
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 10
+-100 <= matrix[i][j] <= 100
+
+You are absolutely correct! My apologies. I provided the code as a standalone Java class, but LeetCode (and many online coding platforms) uses a specific class structure.  Here's the corrected code that should work directly on LeetCode:
+
+Java
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || matrix.length == 0) {
+            return result;
+        }
+
+        int rowStart = 0;
+        int rowEnd = matrix.length - 1;
+        int colStart = 0;
+        int colEnd = matrix[0].length - 1;
+
+        while (rowStart <= rowEnd && colStart <= colEnd) {
+            // Traverse right
+            for (int i = colStart; i <= colEnd; i++) {
+                result.add(matrix[rowStart][i]);
+            }
+            rowStart++;
+
+            // Traverse down
+            for (int i = rowStart; i <= rowEnd; i++) {
+                result.add(matrix[i][colEnd]);
+            }
+            colEnd--;
+
+            // Traverse left (only if there are rows remaining)
+            if (rowStart <= rowEnd) {
+                for (int i = colEnd; i >= colStart; i--) {
+                    result.add(matrix[rowEnd][i]);
+                }
+                rowEnd--;
+            }
+
+            // Traverse up (only if there are columns remaining)
+            if (colStart <= colEnd) {
+                for (int i = rowEnd; i >= rowStart; i--) {
+                    result.add(matrix[i][colStart]);
+                }
+                colStart++;
+            }
+        }
+
+        return result;
+    }
+}
+Explanation of the Change:
+
+The key change is wrapping the spiralOrder method within a class named Solution.  LeetCode's online judge expects your solution to be in a class named Solution.  This is why you were getting the "cannot find symbol: class Solution" error.
+
+How to Use on LeetCode:
+
+Copy and paste this entire code (including the class Solution wrapper) into the LeetCode editor.
+LeetCode will handle the input parameters (matrix in this case) and call your spiralOrder method.
+Your method should return the List<Integer> containing the spiral order of the elements.
+This corrected version should now compile and run correctly on LeetCode.  I apologize for the oversight in the previous response.
