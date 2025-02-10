@@ -1,0 +1,122 @@
+73. Set Matrix Zeroes
+
+Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
+
+You must do it in place.
+
+ 
+
+Example 1:
+
+
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+Output: [[1,0,1],[0,0,0],[1,0,1]]
+Example 2:
+
+
+Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+ 
+
+Constraints:
+
+m == matrix.length
+n == matrix[0].length
+1 <= m, n <= 200
+-231 <= matrix[i][j] <= 231 - 1
+ 
+
+Follow up:
+
+A straightforward solution using O(mn) space is probably a bad idea.
+A simple improvement uses O(m + n) space, but still not the best solution.
+Could you devise a constant space solution?
+
+Java
+
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        boolean firstRowZero = false;
+        boolean firstColZero = false;
+
+        // Check if first row has any zeros
+        for (int j = 0; j < n; j++) {
+            if (matrix[0][j] == 0) {
+                firstRowZero = true;
+                break;
+            }
+        }
+
+        // Check if first column has any zeros
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                firstColZero = true;
+                break;
+            }
+        }
+
+        // Use first row and column as markers for zeros
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+
+        // Set zeros based on markers
+        for (int i = 1; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                for (int j = 1; j < n; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        for (int j = 1; j < n; j++) {
+            if (matrix[0][j] == 0) {
+                for (int i = 1; i < m; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Set first row and column based on initial checks
+        if (firstRowZero) {
+            for (int j = 0; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+
+        if (firstColZero) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+Explanation and Key Improvements for Constant Space:
+
+Using First Row and Column as Markers: The core idea is to use the first row and first column of the matrix itself to store information about which rows and columns need to be set to zero. 
+This avoids using extra space.
+
+Checking First Row and Column Separately: We first check if the actual first row or first column contains any zeros. 
+We store this information in firstRowZero and firstColZero boolean variables because we'll be overwriting the first row and column.
+
+Marking Rows and Columns: We iterate through the rest of the matrix (from index [1][1]). If we encounter a zero at matrix[i][j],
+we mark the corresponding row (by setting matrix[i][0] = 0) and column (by setting matrix[0][j] = 0).
+
+Setting Zeros Based on Markers:  We then iterate through the matrix again.  For any row i where matrix[i][0] is zero, we set the entire row to zero. Similarly,
+for any column j where matrix[0][j] is zero, we set the entire column to zero.
+
+Handling First Row and Column: Finally, we use the firstRowZero and firstColZero flags to correctly set the first row and first column to zero if they originally contained any zeros.
+
+Why this is Constant Space:
+
+The algorithm uses only a few extra variables (firstRowZero, firstColZero, i, j, m, n).  The space used by these variables does not depend on the size of the input matrix.
+We are modifying the matrix in-place, so we are not allocating any significant extra memory.
+Therefore, the space complexity is considered O(1), or constant space.
