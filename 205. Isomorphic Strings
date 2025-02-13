@@ -1,0 +1,110 @@
+205. Isomorphic Strings
+
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings s and t are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+ 
+
+Example 1:
+
+Input: s = "egg", t = "add"
+
+Output: true
+
+Explanation:
+
+The strings s and t can be made identical by:
+
+Mapping 'e' to 'a'.
+Mapping 'g' to 'd'.
+Example 2:
+
+Input: s = "foo", t = "bar"
+
+Output: false
+
+Explanation:
+
+The strings s and t can not be made identical as 'o' needs to be mapped to both 'a' and 'r'.
+
+Example 3:
+
+Input: s = "paper", t = "title"
+
+Output: true
+
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 104
+t.length == s.length
+s and t consist of any valid ascii character.
+
+Java
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        Map<Character, Character> sMap = new HashMap<>();
+        Map<Character, Character> tMap = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char sChar = s.charAt(i);
+            char tChar = t.charAt(i);
+
+            if (sMap.containsKey(sChar)) {
+                if (sMap.get(sChar) != tChar) {
+                    return false;
+                }
+            } else {
+                if (tMap.containsKey(tChar) && tMap.get(tChar) != sChar) {
+                    return false;
+                }
+                sMap.put(sChar, tChar);
+                tMap.put(tChar, sChar);
+            }
+        }
+
+        return true;
+    }
+}
+Explanation and Improvements:
+
+Length Check: The code first checks if the lengths of the two strings are equal. If they aren't, they cannot be isomorphic, so we return false immediately.  This is an important optimization.
+
+HashMap for Mapping: Two HashMaps are used: sMap to store the mapping from characters in s to characters in t, and tMap to store the mapping from characters in t back to characters in s.
+Using two maps ensures that the one-to-one mapping constraint is enforced in both directions.
+
+Iteration and Character Comparison: The code iterates through the strings character by character.  For each character pair (one from s and one from t):
+
+Check Existing Mapping (sMap): It checks if the current character sChar already has a mapping in sMap.  If it does, it verifies that the existing mapping matches the current character tChar. 
+If they don't match, it means the mapping is inconsistent, and we return false.
+
+Check Existing Mapping (tMap):  Critically, it also checks tMap.  If tChar already has a mapping, it must map back to sChar.
+This prevents cases where two different characters in s try to map to the same character in t.
+
+Create Mapping (if none exists): If there's no existing mapping for sChar, and there's no existing reverse mapping for tChar 
+(meaning neither character has been used in a mapping yet), then we create the mapping in both sMap and tMap.
+
+Return True: If the loop completes without finding any inconsistencies, it means the strings are isomorphic, and we return true.
+
+Why the second map (tMap) is essential:
+
+Consider the example s = "ab", t = "aa".
+
+Without tMap, when processing the first characters ('a' and 'a'), sMap would store the mapping 'a' -> 'a'.
+When processing the second characters ('b' and 'a'), sMap wouldn't have a mapping for 'b', so it would create a mapping 'b' -> 'a'.
+This would incorrectly indicate that the strings are isomorphic.
+tMap prevents this. When processing the second characters, tMap would already contain a mapping for 'a' (from 'a' -> 'a'), and the code would correctly detect that 'b' cannot also map to 'a'.
+
+This improved version is more robust and correctly handles all cases of isomorphism. It's also more efficient because it uses HashMaps for lookups, which have an average time complexity of O(1).
