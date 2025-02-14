@@ -1,0 +1,101 @@
+290. Word Pattern
+
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s. Specifically:
+
+Each letter in pattern maps to exactly one unique word in s.
+Each unique word in s maps to exactly one letter in pattern.
+No two letters map to the same word, and no two words map to the same letter.
+ 
+
+Example 1:
+
+Input: pattern = "abba", s = "dog cat cat dog"
+
+Output: true
+
+Explanation:
+
+The bijection can be established as:
+
+'a' maps to "dog".
+'b' maps to "cat".
+Example 2:
+
+Input: pattern = "abba", s = "dog cat cat fish"
+
+Output: false
+
+Example 3:
+
+Input: pattern = "aaaa", s = "dog cat cat dog"
+
+Output: false
+
+ 
+
+Constraints:
+
+1 <= pattern.length <= 300
+pattern contains only lower-case English letters.
+1 <= s.length <= 3000
+s contains only lowercase English letters and spaces ' '.
+s does not contain any leading or trailing spaces.
+All the words in s are separated by a single space.
+
+Java
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        String[] words = s.split(" ");
+        if (pattern.length() != words.length) {
+            return false;
+        }
+
+        Map<Character, String> charToWord = new HashMap<>();
+        Map<String, Character> wordToChar = new HashMap<>();
+
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            String word = words[i];
+
+            if (charToWord.containsKey(c)) {
+                if (!charToWord.get(c).equals(word)) {
+                    return false;
+                }
+            } else {
+                if (wordToChar.containsKey(word)) {
+                    return false;
+                } else {
+                    charToWord.put(c, word);
+                    wordToChar.put(word, c);
+                }
+            }
+        }
+
+        return true;
+    }
+}
+Explanation and Improvements:
+
+Splitting the String: The code first splits the input string s into an array of words using s.split(" ").  This is crucial for comparing words with characters in the pattern.
+
+Length Check: It immediately checks if the length of the pattern and the number of words in s are equal. If not, it's impossible for them to match, so it returns false.
+
+Two Hashmaps: The core of the solution uses two HashMaps:
+
+charToWord: Maps each character in the pattern to a word in s.
+wordToChar: Maps each word in s back to a character in the pattern.
+Using two HashMaps is essential to ensure the bijection requirement (one-to-one mapping in both directions).
+
+Iteration and Checking: The code iterates through the pattern and words simultaneously.  For each character c and word word:
+
+Case 1: charToWord contains c: If the character c is already in charToWord, it checks if the mapped word is the same as the current word. If they are different,
+it means the mapping is inconsistent, and the function returns false.
+Case 2: charToWord does not contain c: This means it's a new mapping. It then checks if the word is already in wordToChar. If it is, 
+it means the word is already mapped to a different character, violating the bijection, so it returns false. Otherwise, it adds the new mapping to both charToWord and wordToChar.
+Return True: If the loop completes without finding any inconsistencies, it means a valid bijection exists, and the function returns true.
