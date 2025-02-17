@@ -1,0 +1,131 @@
+242. Valid Anagram
+
+Given two strings s and t, return true if t is an 
+anagram
+ of s, and false otherwise.
+
+ 
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+
+Output: true
+
+Example 2:
+
+Input: s = "rat", t = "car"
+
+Output: false
+
+ 
+
+Constraints:
+
+1 <= s.length, t.length <= 5 * 104
+s and t consist of lowercase English letters.
+ 
+
+Follow up: What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
+
+Java
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        Map<Character, Integer> sMap = new HashMap<>();
+        Map<Character, Integer> tMap = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            sMap.put(s.charAt(i), sMap.getOrDefault(s.charAt(i), 0) + 1);
+            tMap.put(t.charAt(i), tMap.getOrDefault(t.charAt(i), 0) + 1);
+        }
+
+        return sMap.equals(tMap);
+
+
+        //Alternative approach using single HashMap
+        /*
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        Map<Character, Integer> charCounts = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            charCounts.put(s.charAt(i), charCounts.getOrDefault(s.charAt(i), 0) + 1);
+            charCounts.put(t.charAt(i), charCounts.getOrDefault(t.charAt(i), 0) - 1);
+        }
+
+        for (int count : charCounts.values()) {
+            if (count != 0) {
+                return false;
+            }
+        }
+
+        return true;
+        */
+    }
+
+
+    //For Unicode characters:
+    public boolean isAnagramUnicode(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        Map<Character, Integer> sMap = new HashMap<>();
+        Map<Character, Integer> tMap = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            //Handles any Unicode character
+            int sCodePoint = s.codePointAt(i);
+            int tCodePoint = t.codePointAt(i);
+
+            //Important: Use codePointAt and store as Integer to correctly handle extended characters
+            sMap.put((char)sCodePoint, sMap.getOrDefault((char)sCodePoint, 0) + 1);
+            tMap.put((char)tCodePoint, tMap.getOrDefault((char)tCodePoint, 0) + 1);
+        }
+
+        return sMap.equals(tMap);
+
+    }
+}
+Explanation and Improvements:
+
+HashMap Approach: The code uses two HashMaps, sMap and tMap, to store the character counts for strings s and t, respectively. It iterates through both strings,
+incrementing the count for each character encountered.  Finally, it compares the two maps using sMap.equals(tMap). This is a concise and efficient way to check if the character counts are the same.
+
+Alternative Approach (Single HashMap): The commented-out code provides an alternative using a single HashMap. It increments the count for characters in s and decrements the count for characters in t.
+If the strings are anagrams, all counts in the HashMap should eventually become zero. This is slightly more efficient as it uses only one map.
+
+Unicode Support (isAnagramUnicode): The isAnagramUnicode method addresses the follow-up question about Unicode characters.  The crucial change is the use of s.codePointAt(i) 
+and t.codePointAt(i) instead of s.charAt(i).  codePointAt correctly handles Unicode characters that might be represented by more than one char value (surrogate pairs).
+We cast the returned int code point to char for use as a key.
+
+Handling Surrogate Pairs:  The codePointAt method is essential for proper Unicode handling.  Characters outside the basic multilingual plane (BMP) 
+are represented by surrogate pairs (two char values).  charAt would only give you one half of the surrogate pair, leading to incorrect counts. codePointAt returns the 
+actual Unicode code point as an integer, correctly handling these cases.  We store these code points as char keys in the HashMap.
+
+Early Exit: The code includes a check at the beginning: if (s.length() != t.length()) { return false; }. This is an important optimization. If the strings have different lengths
+, they cannot be anagrams, so we can immediately return false without further processing.
+
+Clarity and Readability: The code uses descriptive variable names (e.g., sMap, tMap, charCounts) and includes comments to explain the logic, making it easier to understand and maintain.
+
+How to use:
+
+Java
+
+public static void main(String[] args) {
+    Solution sol = new Solution();
+    System.out.println(sol.isAnagram("anagram", "nagaram")); // Output: true
+    System.out.println(sol.isAnagram("rat", "car"));       // Output: false
+
+    System.out.println(sol.isAnagramUnicode("你好", "好你")); // Output: true (Example with Chinese characters)
+}
