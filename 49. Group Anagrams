@@ -1,0 +1,171 @@
+49. Group Anagrams
+
+Given an array of strings strs, group the 
+anagrams
+ together. You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+Explanation:
+
+There is no string in strs that can be rearranged to form "bat".
+The strings "nat" and "tan" are anagrams as they can be rearranged to form each other.
+The strings "ate", "eat", and "tea" are anagrams as they can be rearranged to form each other.
+Example 2:
+
+Input: strs = [""]
+
+Output: [[""]]
+
+Example 3:
+
+Input: strs = ["a"]
+
+Output: [["a"]]
+
+ 
+
+Constraints:
+
+1 <= strs.length <= 104
+0 <= strs[i].length <= 100
+strs[i] consists of lowercase English letters.
+
+Java
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Arrays;
+
+public class GroupAnagrams {
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        if (strs == null || strs.length == 0) {
+            return result;
+        }
+
+        HashMap<String, List<String>> map = new HashMap<>();
+
+        for (String str : strs) {
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray); // Sort the characters to create a unique key for anagrams
+            String sortedStr = new String(charArray);
+
+            if (!map.containsKey(sortedStr)) {
+                map.put(sortedStr, new ArrayList<>());
+            }
+            map.get(sortedStr).add(str);
+        }
+
+        result.addAll(map.values()); // Add all the lists of anagrams to the result
+
+        return result;
+    }
+
+
+    public static void main(String[] args) {
+        GroupAnagrams solution = new GroupAnagrams();
+        String[] strs1 = {"eat", "tea", "tan", "ate", "nat", "bat"};
+        System.out.println(solution.groupAnagrams(strs1)); // Output: [[bat], [nat, tan], [ate, eat, tea]]
+
+        String[] strs2 = {""};
+        System.out.println(solution.groupAnagrams(strs2)); // Output: [[""]]
+
+        String[] strs3 = {"a"};
+        System.out.println(solution.groupAnagrams(strs3)); // Output: [["a"]]
+
+        String[] strs4 = {"cab","tin","ate","eat","tea","bac","act"};
+        System.out.println(solution.groupAnagrams(strs4)); // Output: [[cab, bac, act], [tin], [ate, eat, tea]]
+
+    }
+}
+Explanation and Improvements:
+
+HashMap for Grouping: A HashMap is used to store the sorted string (which acts as a unique key for all anagrams) and the list of original strings that are anagrams of each other.
+
+Sorting for Key Generation: The core idea is to sort the characters of each string.  Anagrams will have the same sorted string representation. 
+This sorted string becomes the key in the HashMap.  For example, "eat", "tea", and "ate" all become "aet" when sorted.
+
+Adding to the List:  If the sorted string (key) is not already in the HashMap, a new ArrayList is created and associated with that key. 
+The original string is then added to the list associated with its sorted key.
+
+Returning the Result: Finally, the values() of the HashMap (which are the lists of anagrams) are added to the result list, which is then returned.
+
+Handling Empty/Null Input: The code now includes a check at the beginning to handle cases where the input strs array is null or empty. This makes the code more robust.
+
+Clearer Variable Names:  Slightly more descriptive variable names (like sortedStr instead of just key) improve readability.
+
+Main Method for Testing:  A main method is included to demonstrate the usage of the groupAnagrams method with the example inputs provided in the prompt, plus a couple of extra test cases. 
+This is very important for testing your code and ensuring it works correctly.
+
+Time Complexity: O(N * K log K), where N is the number of strings and K is the maximum length of a string.  We sort each string (K log K) and do this for all N strings.
+
+Space Complexity: O(N * K) in the worst case, as the HashMap might store all the strings.  In average cases, it will be less if there are many anagrams.
+
+
+
+
+
+
+error: cannot find symbol [in __Driver__.java]
+
+List<List<String>> ret = new Solution().groupAnagrams(param_1);
+
+^
+
+symbol: class Solution
+
+location: class __DriverSolution__ not excepted on leetcode
+
+
+
+You are absolutely correct! My apologies.  When submitting to LeetCode (or some other online judges), 
+you typically don't have the main method or the Solution class declaration exactly as I provided it for testing.  LeetCode provides the class and method signature for you.
+
+Here's the corrected code, ready for LeetCode submission:
+
+Java
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Arrays;
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        if (strs == null || strs.length == 0) {
+            return result;
+        }
+
+        HashMap<String, List<String>> map = new HashMap<>();
+
+        for (String str : strs) {
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray);
+            String sortedStr = new String(charArray);
+
+            if (!map.containsKey(sortedStr)) {
+                map.put(sortedStr, new ArrayList<>());
+            }
+            map.get(sortedStr).add(str);
+        }
+
+        result.addAll(map.values());
+
+        return result;
+    }
+}
+Key Changes for LeetCode:
+
+class Solution: The code is now enclosed within the class Solution declaration, which is what LeetCode expects.
+No main method: The main method is removed, as LeetCode handles the input and output for you.
+With this corrected code, you should be able to submit it to LeetCode without the "cannot find symbol" error.  The logic remains the same; only the class structure is adjusted.
