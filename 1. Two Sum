@@ -1,0 +1,131 @@
+1. Two Sum
+
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+Example 2:
+
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+Example 3:
+
+Input: nums = [3,3], target = 6
+Output: [0,1]
+ 
+
+Constraints:
+
+2 <= nums.length <= 104
+-109 <= nums[i] <= 109
+-109 <= target <= 109
+Only one valid answer exists.
+ 
+
+Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
+
+The error "cannot find symbol: class Solution" means that the Java compiler cannot locate a class named Solution in your current compilation context. This usually happens when:
+
+The Solution class is not defined: You haven't actually created a class named Solution containing the twoSum method.
+
+The Solution class is in a different package: The Solution class exists, but it's in a different Java package than the one where you're trying to use it (the __Driver__ or __DriverSolution__ class).
+
+Compilation issues:  There might be problems with your build process or classpath.
+
+Here's how to fix it, along with best practices:
+
+1. Define the Solution class:
+
+Make sure you have a Solution.java file (or whatever you want to name it) in the same directory (or a directory included in your classpath) as your driver class.  Inside Solution.java, define the class and the twoSum method:
+
+Java
+
+// Solution.java
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Solution {  // Class name must match the file name (Solution.java)
+
+    public int[] twoSum(int[] nums, int target) {
+        // ... (Your twoSum implementation - either brute-force or optimal)
+        Map<Integer, Integer> numMap = new HashMap<>(); // Key: number, Value: index
+
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (numMap.containsKey(complement)) {
+                return new int[] { numMap.get(complement), i };
+            }
+            numMap.put(nums[i], i); // Add the current number and its index to the map
+        }
+        return new int[0]; // Should not happen
+    }
+}
+2. Package Declaration (If necessary):
+
+If you want to organize your code into packages (which is good practice), you'll need to declare the package at the top of your Solution.java file:
+
+Java
+
+// Solution.java
+package com.mycompany.problems; // Example package name
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Solution {
+    // ... (Your twoSum method)
+}
+If you put the Solution.java file in a directory structure like com/mycompany/problems/, the package declaration must match that structure.
+
+Then, in your driver class, you'll need to import the Solution class:
+
+Java
+
+// __Driver__.java (or __DriverSolution__.java)
+package com.mycompany.driver; // Example package for the driver
+
+import com.mycompany.problems.Solution; // Import the Solution class
+
+public class __Driver__ {
+    public static void main(String[] args) {
+        int[] param_1 = {2,7,11,15}; // Example input
+        int param_2 = 9;
+        int[] ret = new Solution().twoSum(param_1, param_2);
+        System.out.println(Arrays.toString(ret));
+    }
+}
+3. Compilation:
+
+Command Line: If you're compiling from the command line, make sure your classpath is set correctly. If using packages, compile from the base directory of your package structure. For instance:
+Bash
+
+javac com/mycompany/problems/Solution.java
+javac com/mycompany/driver/__Driver__.java  // or __DriverSolution__.java
+java com.mycompany.driver.__Driver__ // Run the program
+IDE (IntelliJ, Eclipse, NetBeans): If you're using an IDE, make sure your project is set up correctly. The IDE should handle the classpath and compilation for you.
+Just make sure the Solution.java and driver class files are in the correct project source folders.
+4. Check for Typos: Double-check for any typos in the class name (Solution) or package names. Java is case-sensitive.
+
+Example Directory Structure (with packages):
+
+src/
+    com/
+        mycompany/
+            problems/
+                Solution.java
+            driver/
+                __Driver__.java  (or __DriverSolution__.java)
+By following these steps, you should be able to resolve the "cannot find symbol: class Solution" error and successfully compile and run your code.  
+If you still have problems, please provide more details about your project setup (IDE or command-line, directory structure, etc.).
+
+
