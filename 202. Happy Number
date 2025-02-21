@@ -1,0 +1,114 @@
+202. Happy Number
+
+Write an algorithm to determine if a number n is happy.
+
+A happy number is a number defined by the following process:
+
+Starting with any positive integer, replace the number by the sum of the squares of its digits.
+Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.
+Those numbers for which this process ends in 1 are happy.
+Return true if n is a happy number, and false if not.
+
+ 
+
+Example 1:
+
+Input: n = 19
+Output: true
+Explanation:
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+Example 2:
+
+Input: n = 2
+Output: false
+ 
+
+Constraints:
+
+1 <= n <= 231 - 1
+
+Java
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public boolean isHappy(int n) {
+        // Use a HashSet to detect cycles
+        Set<Integer> seen = new HashSet<>();
+
+        while (n != 1 && !seen.contains(n)) {
+            seen.add(n);
+            n = getNext(n);
+        }
+
+        return n == 1;
+    }
+
+    private int getNext(int n) {
+        int sum = 0;
+        while (n > 0) {
+            int digit = n % 10;
+            sum += digit * digit;
+            n /= 10;
+        }
+        return sum;
+    }
+
+
+     public boolean isHappyHashMap(int n) {
+        HashMap<Integer, Boolean> map = new HashMap<>();
+
+        while (n != 1 && !map.containsKey(n)) {
+            map.put(n, true);
+            n = getNext(n);
+        }
+
+        return n == 1;
+    }
+
+    private int getNextHashMap(int n) {
+        int sum = 0;
+        while (n > 0) {
+            int digit = n % 10;
+            sum += digit * digit;
+            n /= 10;
+        }
+        return sum;
+    }
+}
+Explanation and Improvements:
+
+Cycle Detection with HashSet: The most efficient way to determine if a number is happy is to detect cycles.  We use a HashSet called seen to keep track of the numbers we've already encountered.  
+If we encounter a number again (other than 1), it means we're in a cycle, and the number is not happy.
+
+getNext(n) Function: This helper function calculates the sum of the squares of the digits of a number. It's clean and makes the isHappy function more readable.
+
+isHappy(n) Function:
+
+It initializes the seen HashSet.
+The while loop continues as long as n is not 1 and n has not been seen before.
+Inside the loop, we add n to seen and then update n with the result of getNext(n).
+Finally, we return true if n is 1 (meaning we reached the happy number condition), and false otherwise (meaning we're in a cycle).
+HashMap Version: The isHappyHashMap and getNextHashMap functions provide the same functionality using a HashMap instead of a HashSet.  While both achieve the same result,
+a HashSet is generally slightly more efficient for just checking the presence of an element, as we do here.  A HashMap would be more useful if you needed to store additional
+information associated with each number in the sequence.
+
+Example Usage:
+
+Java
+
+public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.isHappy(19)); // Output: true
+    System.out.println(solution.isHappy(2));  // Output: false
+    System.out.println(solution.isHappyHashMap(19)); // Output: true
+    System.out.println(solution.isHappyHashMap(2));  // Output: false
+}
+This improved version is more efficient, readable, and clearly demonstrates the cycle detection logic using a HashSet (or a HashMap if you prefer).
+The use of a helper function also makes the code more organized.
+
