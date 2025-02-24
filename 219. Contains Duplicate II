@@ -1,0 +1,67 @@
+219. Contains Duplicate II
+
+Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,1], k = 3
+Output: true
+Example 2:
+
+Input: nums = [1,0,1,1], k = 1
+Output: true
+Example 3:
+
+Input: nums = [1,2,3,1,2,3], k = 2
+Output: false
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+-109 <= nums[i] <= 109
+0 <= k <= 105
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k < 0) {
+            return false; // Handle invalid input
+        }
+
+        Map<Integer, Integer> numIndexMap = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            if (numIndexMap.containsKey(num)) {
+                int previousIndex = numIndexMap.get(num);
+                if (i - previousIndex <= k) {
+                    return true;
+                }
+            }
+            numIndexMap.put(num, i); // Update the most recent index
+        }
+
+        return false;
+    }
+}
+Key Changes and Explanation:
+
+class Solution: The class is now named Solution, as required by many online judges.
+
+Method Signature: The method signature public boolean containsNearbyDuplicate(int[] nums, int k) remains the same, as this is typically what they expect.
+
+No main Method:  The main method (which was for testing) has been removed.  Online judges usually provide their own driver code to call your containsNearbyDuplicate method with different test cases. 
+You only need to provide the Solution class and the required method.
+
+How to Submit:
+
+When you submit this code to an online judge, make sure you only submit the code within the class Solution { ... } block.  Do not include any extra code outside of this class definition.  
+The online judge will handle the rest.
+
+
