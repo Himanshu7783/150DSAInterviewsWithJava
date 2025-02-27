@@ -1,0 +1,101 @@
+228. Summary Ranges
+
+You are given a sorted unique integer array nums.
+
+A range [a,b] is the set of all integers from a to b (inclusive).
+
+Return the smallest sorted list of ranges that cover all the numbers in the array exactly. That is, each element of nums is covered by exactly one of the ranges,
+and there is no integer x such that x is in one of the ranges but not in nums.
+
+Each range [a,b] in the list should be output as:
+
+"a->b" if a != b
+"a" if a == b
+ 
+
+Example 1:
+
+Input: nums = [0,1,2,4,5,7]
+Output: ["0->2","4->5","7"]
+Explanation: The ranges are:
+[0,2] --> "0->2"
+[4,5] --> "4->5"
+[7,7] --> "7"
+Example 2:
+
+Input: nums = [0,2,3,4,6,8,9]
+Output: ["0","2->4","6","8->9"]
+Explanation: The ranges are:
+[0,0] --> "0"
+[2,4] --> "2->4"
+[6,6] --> "6"
+[8,9] --> "8->9"
+ 
+
+Constraints:
+
+0 <= nums.length <= 20
+-231 <= nums[i] <= 231 - 1
+All the values of nums are unique.
+nums is sorted in ascending order.
+
+Java
+
+class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        List<String> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+
+        int start = nums[0];
+        for (int i = 1; i <= nums.length; i++) {
+            if (i < nums.length && nums[i] == nums[i - 1] + 1) {
+                continue;
+            } else {
+                if (start == nums[i - 1]) {
+                    result.add(String.valueOf(start));
+                } else {
+                    result.add(start + "->" + nums[i - 1]);
+                }
+                if (i < nums.length) {
+                    start = nums[i];
+                }
+            }
+        }
+        return result;
+    }
+}
+Explanation:
+
+Initialization:
+
+Create an empty ArrayList called result to store the summary ranges.
+Handle the edge case where nums is null or empty.
+Initialize start to the first element of nums.
+Iteration:
+
+Iterate through the nums array from the second element (index 1) to the end (inclusive).
+Check for Consecutive Numbers:
+If the current element nums[i] is consecutive to the previous element nums[i - 1] (i.e., nums[i] == nums[i - 1] + 1), continue to the next iteration. This means the current range is still extending.
+Range End Detected:
+If the current element is not consecutive, or if we've reached the end of the array, it means the current range has ended.
+Single Element Range:
+If start is equal to the previous element nums[i - 1], it means the range contains only one element. Add String.valueOf(start) to the result.
+Multiple Element Range:
+If start is not equal to nums[i - 1], it means the range contains multiple elements. Add start + "->" + nums[i - 1] to the result.
+Reset Start:
+If we haven't reached the end of the array, update start to the current element nums[i], starting a new range.
+Return Result:
+
+Return the result list containing the summary ranges.
+Example Walkthrough (nums = [0, 1, 2, 4, 5, 7]):
+
+start = 0.
+i = 1, nums[1] == nums[0] + 1, continue.
+i = 2, nums[2] == nums[1] + 1, continue.
+i = 3, nums[3] != nums[2] + 1. start = 0, nums[2] = 2. Add "0->2" to result. start = 4.
+i = 4, nums[4] == nums[3] + 1, continue.
+i = 5, nums[5] != nums[4] + 1. start = 4, nums[4] = 5. Add "4->5" to result. start = 7.
+i = 6 (end of loop). start = 7, nums[5] = 7. Add "7" to result.
+Return ["0->2", "4->5", "7"].
