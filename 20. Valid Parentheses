@@ -1,0 +1,100 @@
+20. Valid Parentheses
+
+Hint
+Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+Every close bracket has a corresponding open bracket of the same type.
+ 
+
+Example 1:
+
+Input: s = "()"
+
+Output: true
+
+Example 2:
+
+Input: s = "()[]{}"
+
+Output: true
+
+Example 3:
+
+Input: s = "(]"
+
+Output: false
+
+Example 4:
+
+Input: s = "([])"
+
+Output: true
+
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of parentheses only '()[]{}'.
+
+Java
+
+import java.util.Stack;
+
+class Solution {
+    public boolean isValid(String s) {
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                char top = stack.pop();
+                if ((c == ')' && top != '(') || (c == '}' && top != '{') || (c == ']' && top != '[')) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+Explanation:
+
+Initialization:
+
+We create a Stack<Character> to store the opening brackets.
+We handle the cases where the input string is null or empty, returning true in those cases.
+Iteration:
+
+We iterate through each character c in the input string s.
+Opening Brackets: If c is an opening bracket ((, {, or [), we push it onto the stack.
+Closing Brackets: If c is a closing bracket (), }, or ]), we do the following:
+Empty Stack: If the stack is empty, it means there's no corresponding opening bracket, so we return false.
+Matching Brackets: We pop the top element top from the stack. We then check if c and top are matching pairs. If they don't match (e.g., c is ) and top is {), we return false.
+Final Check:
+
+After iterating through the entire string, if the stack is empty, it means all opening brackets have been matched with their corresponding closing brackets, so we return true.
+If the stack is not empty, it means there are unmatched opening brackets, so we return false.
+How it works:
+
+The stack is used to keep track of the order of opening brackets. When we encounter a closing bracket, we check if it matches the most recent opening bracket (the one on top of the stack).
+This ensures that the brackets are closed in the correct order.
+Example walkthrough:
+
+Let's take the example s = "([])":
+
+(: Push ( onto the stack. Stack: (.
+[: Push [ onto the stack. Stack: (, [.
+]: Pop [ from the stack. ] matches [. Stack: (.
+): Pop ( from the stack. ) matches (. Stack: (empty).
+Stack is empty, so return true.
