@@ -1,0 +1,92 @@
+92. Reverse Linked List II
+
+Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+Example 2:
+
+Input: head = [5], left = 1, right = 1
+Output: [5]
+ 
+
+Constraints:
+
+The number of nodes in the list is n.
+1 <= n <= 500
+-500 <= Node.val <= 500
+1 <= left <= right <= n
+ 
+
+Follow up: Could you do it in one pass?
+
+Java
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if (head == null || left == right) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+
+        // Move prev to the node just before the left position
+        for (int i = 1; i < left; i++) {
+            prev = prev.next;
+        }
+
+        // Start reversing from the left position
+        ListNode current = prev.next;
+        ListNode nextNode = null;
+        ListNode previous = null;
+
+        for (int i = left; i <= right; i++) {
+            nextNode = current.next;
+            current.next = previous;
+            previous = current;
+            current = nextNode;
+        }
+
+        // Connect the reversed sublist back to the original list
+        prev.next.next = current;
+        prev.next = previous;
+
+        return dummy.next;
+    }
+}
+This solution tackles the problem in a single pass. Here's the breakdown:
+
+Handle Edge Cases: If the list is empty or left and right are the same, no reversal is needed, so we return the original head.
+
+Dummy Node: We introduce a dummy node at the beginning. This simplifies the logic, especially when left is 1, as it provides a consistent prev node.
+
+Move to the Left Position: We iterate with the prev pointer until it reaches the node just before the left position.
+
+Reverse the Sublist:
+
+We initialize current to the left node.
+We use a standard iterative list reversal approach with previous, current, and nextNode pointers to reverse the nodes from left to right.
+Connect Back:
+
+prev.next now points to the beginning of the reversed sublist (previous).
+prev.next.next (which was the original left node) now points to the node after the reversed sublist (current).
+Return Result: Finally, we return dummy.next, which is the head of the modified linked list.
+
+This approach efficiently reverses the specified portion of the linked list in a single traversal!
