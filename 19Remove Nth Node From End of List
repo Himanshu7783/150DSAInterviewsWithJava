@@ -1,0 +1,89 @@
+19. Remove Nth Node From End of List
+
+Hint
+Given the head of a linked list, remove the nth node from the end of the list and return its head.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5], n = 2
+Output: [1,2,3,5]
+Example 2:
+
+Input: head = [1], n = 1
+Output: []
+Example 3:
+
+Input: head = [1,2], n = 1
+Output: [1]
+ 
+
+Constraints:
+
+The number of nodes in the list is sz.
+1 <= sz <= 30
+0 <= Node.val <= 100
+1 <= n <= sz
+ 
+
+Follow up: Could you do this in one pass?
+
+Java
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode slow = dummy;
+        ListNode fast = dummy;
+
+        // Advance fast pointer n steps ahead
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+
+        // Move both pointers until fast reaches the end
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        // Now slow pointer is just before the node to be removed
+        slow.next = slow.next.next;
+
+        return dummy.next;
+    }
+}
+Explanation:
+
+Create a Dummy Node: A dummy node is created at the beginning of the list. This simplifies the case where the head of the list needs to be removed. The next of the dummy node points to the original head.
+
+Initialize Two Pointers: Two pointers, slow and fast, are initialized to the dummy node.
+
+Move the fast Pointer: The fast pointer is moved n steps ahead in the linked list. Now, the distance between the fast and slow pointers is n.
+
+Move Both Pointers Simultaneously: Both the slow and fast pointers are moved one step at a time until the fast pointer reaches the end of the list (i.e., fast.next becomes null).
+
+Locate the Node to Remove: When the fast pointer reaches the end, the slow pointer will be pointing to the node just before the node that needs to be removed (the nth node from the end).
+
+Remove the Node: To remove the nth node from the end, we simply update the next pointer of the slow node to skip the next node. That is, slow.next = slow.next.next;.
+
+Return the Head: Finally, we return dummy.next, which is the head of the modified linked list.
+
+One-Pass Approach:
+
+This solution achieves the task in a single pass through the linked list. The fast pointer is used to determine the position of the node to be
+removed relative to the end of the list, while the slow pointer tracks the node just before it.
+This avoids the need for a separate pass to determine the length of the list.
