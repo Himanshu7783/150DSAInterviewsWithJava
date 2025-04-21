@@ -1,0 +1,114 @@
+82. Remove Duplicates from Sorted List II
+
+Given the head of a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list. Return the linked list sorted as well.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,3,4,4,5]
+Output: [1,2,5]
+Example 2:
+
+
+Input: head = [1,1,1,2,3]
+Output: [2,3]
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [0, 300].
+-100 <= Node.val <= 100
+The list is guaranteed to be sorted in ascending order.
+
+Java
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode curr = head;
+
+        while (curr != null) {
+            // Check if the current node has duplicates
+            boolean isDuplicate = false;
+            while (curr.next != null && curr.val == curr.next.val) {
+                curr = curr.next;
+                isDuplicate = true;
+            }
+
+            // If duplicates were found, skip all duplicate nodes
+            if (isDuplicate) {
+                prev.next = curr.next;
+            } else {
+                // If no duplicates, move the 'prev' pointer forward
+                prev = curr;
+            }
+            curr = curr.next;
+        }
+
+        return dummy.next;
+    }
+}
+Explanation:
+
+Initialization:
+
+We create a dummy node. This is a common technique for linked list problems, especially when the head of the list might be removed. The dummy node points to the original head.
+prev pointer is initialized to the dummy node. It will track the node before the current group of nodes we are examining.
+curr pointer is initialized to the actual head of the list. It will iterate through the list.
+Iteration:
+
+The while (curr != null) loop iterates through the linked list.
+Duplicate Detection:
+
+Inside the loop, we have a nested while loop: while (curr.next != null && curr.val == curr.next.val). This inner loop continues as long as there is a next node and
+its value is the same as the current node's value. This effectively moves curr to the last node in the sequence of duplicate values.
+The isDuplicate boolean flag is set to true if any duplicates are found.
+Handling Duplicates:
+
+After the inner loop, if isDuplicate is true, it means we encountered duplicate nodes. In this case, we want to skip all these duplicate nodes. 
+We achieve this by setting prev.next to curr.next. This effectively removes the entire block of duplicate nodes from the list.
+Moving prev:
+
+If isDuplicate is false, it means the current node curr is unique. In this case, we move the prev pointer to curr (prev = curr) so that it is ready to link to the next unique node.
+Moving curr:
+
+In each iteration of the outer while loop, we move curr to its next node (curr = curr.next) to continue the traversal.
+Returning the Result:
+
+Finally, we return dummy.next. Since dummy was placed before the original head, dummy.next will point to the head of the modified linked list
+(which might be the original head or a later node if the initial nodes were duplicates).
+How it handles the examples:
+
+Example 1: [1,2,3,3,4,4,5]
+
+1 is unique, prev moves to 1.
+2 is unique, prev moves to 2.
+3 and 3 are duplicates, prev.next becomes 4.
+4 and 4 are duplicates, prev.next becomes 5.
+5 is unique, prev moves to 5.
+Result: [1,2,5]
+Example 2: [1,1,1,2,3]
+
+1, 1, and 1 are duplicates, prev.next becomes 2.
+2 is unique, prev moves to 2.
+3 is unique, prev moves to 3.
+Result: [2,3]
+
