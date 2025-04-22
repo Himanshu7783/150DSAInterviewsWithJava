@@ -1,0 +1,93 @@
+61. Rotate List
+
+Given the head of a linked list, rotate the list to the right by k places.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5], k = 2
+Output: [4,5,1,2,3]
+Example 2:
+
+
+Input: head = [0,1,2], k = 4
+Output: [2,0,1]
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [0, 500].
+-100 <= Node.val <= 100
+0 <= k <= 2 * 109
+
+Alright, let's translate that Python solution into Java! The logic remains the same, but the syntax will be a bit different.
+
+Java
+
+public class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || k == 0) {
+            return head;
+        }
+
+        // 1. Find the length of the list
+        int length = 0;
+        ListNode current = head;
+        while (current != null) {
+            length++;
+            current = current.next;
+        }
+
+        // 2. Calculate the effective rotation
+        int effectiveK = k % length;
+        if (effectiveK == 0) {
+            return head;
+        }
+
+        // 3. Find the new head and the node before the new head
+        ListNode slow = head;
+        ListNode fast = head;
+        for (int i = 0; i < effectiveK; i++) {
+            fast = fast.next;
+        }
+
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        // 4. Perform the rotation
+        ListNode newHead = slow.next;
+        slow.next = null;
+        fast.next = head;
+
+        return newHead;
+    }
+}
+In this Java code:
+
+We have the standard ListNode class definition for a singly linked list.
+The rotateRight method takes the head of the linked list and the integer k as input.
+The initial checks for an empty list or k=0 are the same.
+We iterate through the list to calculate its length.
+The effectiveK is calculated using the modulo operator.
+We use two pointers, slow and fast, initialized to the head. The fast pointer is moved effectiveK steps ahead.
+Then, we move both slow and fast pointers until fast reaches the end of the list. At this point, slow will be pointing to the node just before the new head.
+We then rearrange the pointers:
+The node after slow becomes the newHead.
+The next pointer of slow is set to null to terminate the new tail.
+The next pointer of the original tail (fast) is connected to the original head.
+Finally, we return the newHead of the rotated list.
+This Java solution mirrors the logic of the Python solution and should correctly rotate the linked list to the right by k places.
+Let me know if you have any other questions or would like to test it with an example!
+
